@@ -58,7 +58,10 @@ public class Main{
             g.AddEdge("e", "f", 9);
 
             System.out.print("Graph data:");
-            System.out.print(g.GetNodes());
+            System.out.print(g.GetNodes() + "\n\n\n");
+
+            dijkstra myDike = new dijkstra(g, g.GetNode("a"), g.GetNode("e"));
+            System.out.print(myDike.FindShortest());
         }
         catch (Exception ex) {
             System.out.print("\n\nUh-Oh! An exception occurred! See below:\n\n");

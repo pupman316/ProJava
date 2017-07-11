@@ -1,5 +1,9 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 /**
  * Created by Flores on 7/8/2017.
  */
@@ -19,11 +23,70 @@ public class dijkstra {
     Graph theGraph;
     Node startNode;
     Node endNode;
+    Node currentNode;
 
     public dijkstra(Graph newGraph, Node newStart, Node newEnd){
         this.theGraph = newGraph;
         this.startNode = newStart;
+        this.startNode.weight = 0;
         this.endNode = newEnd;
+    }
+
+    public String FindShortest()
+    {
+        int intTraveled = 0; // total distance of trip
+        ArrayList<Node> unevaluated = theGraph.GetNodes();
+
+        // removing startNode from "unvisited"
+        unevaluated.remove(this.startNode);
+
+        // assigning startNode as current node
+        this.currentNode = this.startNode;
+
+        while (!unevaluated.isEmpty()){
+            // *Get neighbors to current node and assign weight
+            unevaluated.forEach((n)->{
+                if (!n.visited) {
+                    this.currentNode.GetConnections().forEach((nei) -> {
+                        if (nei.mate.id == n.id) {
+                            n.SetVisited();
+                            n.weight = nei.cost + this.currentNode.weight;
+                        }
+                    });
+                }
+            });
+
+            unevaluated.sort(Comparator.comparingInt(Node::GetWeight)); // sorting by Weight of nodes
+
+            unevaluated.get(0).previous = this.currentNode; // the next node was arrived at via the current node
+            this.currentNode = unevaluated.get(0);
+
+            // if at target node, the search is over
+            if (this.currentNode == endNode){
+                break;
+            }
+
+            this.currentNode.SetVisited();
+            unevaluated.remove(0);
+        }
+
+        // Reverse the path to generate the answer
+        ArrayList<Node> pathFinder = new ArrayList<>();
+        pathFinder.add(this.endNode);
+        int jumpCount = 0;
+
+        while (pathFinder.get(jumpCount).previous != null){
+            pathFinder.add(pathFinder.get(jumpCount).previous);
+            jumpCount++;
+        }
+
+        String returnMe = "The fastest path is: ";
+
+        for (int i = jumpCount; i>=0; i--){
+            returnMe += pathFinder.get(i).id + ", ";
+        }
+
+        return returnMe;
     }
 }
 

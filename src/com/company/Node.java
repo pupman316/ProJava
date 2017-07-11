@@ -17,6 +17,7 @@ public class Node{
         this.adjacent = new ArrayList<Neighbor>();
         this.weight = 999;
         this.visited = false;
+        this.previous = null;
     }
 
     protected void AddNeighbor(Node newNeighbor, int newCost){
