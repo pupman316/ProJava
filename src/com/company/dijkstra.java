@@ -3,6 +3,7 @@ package com.company;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.lang.StringBuilder;
 
 /**
  * Created by Flores on 7/8/2017.
@@ -48,7 +49,7 @@ public class dijkstra {
             unevaluated.forEach((n)->{
                 if (!n.visited) {
                     this.currentNode.GetConnections().forEach((nei) -> {
-                        if (nei.mate.id == n.id) {
+                        if (nei.mate.id.equals(n.id)) {
                             n.SetVisited();
                             n.weight = nei.cost + this.currentNode.weight;
                         }
@@ -80,13 +81,14 @@ public class dijkstra {
             jumpCount++;
         }
 
-        String returnMe = "The fastest path is: ";
+        StringBuilder returnMe = new StringBuilder();
+        returnMe.append("The fastest path is: ");
 
         for (int i = jumpCount; i>=0; i--){
-            returnMe += pathFinder.get(i).id + ", ";
+            returnMe.append(pathFinder.get(i).id + ", ");
         }
 
-        return returnMe;
+        return returnMe.toString();
     }
 }
 
